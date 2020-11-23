@@ -1,0 +1,7 @@
+target/
+.idea/
+*.iml
+log/event.log
+/.idea/
+logs.log
+logs/
