@@ -46,6 +46,23 @@ public class EventsPage {
     @FindAll({@FindBy(xpath = "//div[@class='evnt-cards-container']/h3[text()=\"This week\"]/following-sibling::div/div")})
     private List<WebElement> listEventToThisWeek;
 
+    /**
+     * локатор фильтра местопроведения мероприятия
+     */
+    @FindBy(id = "filter_location")
+    private WebElement filterLocation;
+
+    /**
+     * локатор ввода текста в фильтр
+     */
+    @FindBy(xpath = "//div[@id='filter_location']/following-sibling::div//input[@placeholder='Start typing']")
+    private WebElement inputLocationFilter;
+
+    /**
+     * локатор чек-бокса Канада
+     */
+    @FindBy(xpath = "//div[@id='filter_location']/following-sibling::div//div[@class='evnt-checkbox form-check']//span[text()='Canada']")
+    private WebElement checkBoxCanada;
 
     /**
      * Метод нажатия на кнопку выбора актуальности мероприятий (опционально)
@@ -54,6 +71,28 @@ public class EventsPage {
         eventTabElements.findElement(By.xpath(String.format("//span[text()=\"%s\"]", eventTab))).click();
         Allure.addAttachment("Выполнено нажатие кнопки ", eventTab);
         logger.info("Выполнено нажатие кнопки: " + eventTab);
+    }
+
+    public void clickCheckBoxCanada(){
+        checkBoxCanada.click();
+        logger.info("Выбрали локацию в фильтре");
+    }
+
+    /**
+     * Метод ввода текста в фильтр локации
+     */
+    public void setInputLocationFilter(String value) {
+        inputLocationFilter.sendKeys(value);
+        logger.info("Ввели текст поиска " + value);
+        Allure.addAttachment("Ввели текст поиска",value);
+    }
+
+    /**
+     * Метод нажатия на кнопку фильтра локации
+     */
+    public void clickFilterLocation() {
+        filterLocation.click();
+        logger.info("Нажали на кнопку фильтра локации");
     }
 
     /**
@@ -67,17 +106,17 @@ public class EventsPage {
     /**
      * Метод получения счетчика событий
      */
-    public Integer getCountUpcomingEvents() {
+    public Integer getCountUpcomingEvents(String event) {
         logger.info("Возвращаем счетчик событий");
-        return Integer.parseInt(eventTabElements.findElement(By.xpath("//span[text()=\"Upcoming events\"]/following-sibling::span[contains(@class,'evnt-tab-counter')]")).getText());
+        return Integer.parseInt(eventTabElements.findElement(By.xpath(String.format("//span[text()=\"%s\"]/following-sibling::span[contains(@class,'evnt-tab-counter')]",event))).getText());
     }
 
     /**
      * Метод получения дат событий
      */
-    public ArrayList<String> getAllDateEventsWeek(){
+    public ArrayList<String> getAllDateEventsWeek() {
         ArrayList<String> listDate = new ArrayList<>();
-        for (WebElement element:listEventToThisWeek) {
+        for (WebElement element : listEventToThisWeek) {
             listDate.add(element.findElement(By.xpath(eventDate)).getText());
         }
         return listDate;

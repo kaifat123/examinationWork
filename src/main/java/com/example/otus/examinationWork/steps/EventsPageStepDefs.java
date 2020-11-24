@@ -2,6 +2,7 @@ package com.example.otus.examinationWork.steps;
 
 import com.example.otus.examinationWork.helpers.DriverHooks;
 import com.example.otus.examinationWork.pages.EventsPage;
+import io.cucumber.java.ru.Затем;
 import io.cucumber.java.ru.И;
 import io.cucumber.java.ru.Тогда;
 import io.qameta.allure.Allure;
@@ -27,14 +28,22 @@ public class EventsPageStepDefs {
         eventsPage.clickEventTabElements(events);
     }
 
+    @Затем("Пользователь нажимает на фильтр локации, вводит в поиск {string} и производит выбор локации")
+    public void actionFilterLocationCanada(String input){
+        eventsPage.clickFilterLocation();
+        eventsPage.setInputLocationFilter(input);
+        eventsPage.clickCheckBoxCanada();
+        eventsPage.clickFilterLocation();
+    }
+
     @Тогда("Пользователь проверяет отображение карточек мероприятий")
     public void checkCardsEvents() {
         Assert.assertTrue(eventsPage.getListAllEvents().size() > 0);
     }
 
-    @Тогда("Пользователь сравнивает количество карточек мероприятий и счетчик")
-    public void equalsCountEvents() {
-        Integer count = eventsPage.getCountUpcomingEvents();
+    @Тогда("Пользователь сравнивает количество карточек мероприятий и счетчик {string}")
+    public void equalsCountEvents(String event) {
+        Integer count = eventsPage.getCountUpcomingEvents(event);
         Integer sizeList = eventsPage.getListAllEvents().size();
         Allure.addAttachment("Счетчик событий: ", count.toString());
         Allure.addAttachment("Колличество карточек событий: ", sizeList.toString());
