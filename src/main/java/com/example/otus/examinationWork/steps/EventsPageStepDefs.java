@@ -33,4 +33,9 @@ public class EventsPageStepDefs {
         Allure.addAttachment("Колличество карточек событий: ", sizeList.toString());
         Assert.assertSame(count, sizeList);
     }
+
+    @Тогда("Проверить, что в карточке информация о {string} присутствует")
+    public void checkInfoCard(String info){
+        Assert.assertFalse(eventsPage.getInfoCardEvents(info));
+    }
 }

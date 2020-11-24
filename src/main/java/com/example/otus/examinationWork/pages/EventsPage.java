@@ -58,4 +58,55 @@ public class EventsPage {
         logger.info("Возвращаем счетчик событий");
         return Integer.parseInt(eventTabElements.findElement(By.xpath("//span[text()=\"Upcoming events\"]/following-sibling::span[contains(@class,'evnt-tab-counter')]")).getText());
     }
+
+    /**
+     * Метод метод получения информации из карточке
+     */
+    public boolean getInfoCardEvents(String info) {
+        Boolean result = true;
+        String temp;
+        WebElement element = getListAllEvents().get(0);
+        switch (info) {
+            case "место проведения": {
+                temp = element.findElement(By.xpath("//div[@class='evnt-card-heading']/div/div/p[@class='online']/span")).getText();
+                Allure.addAttachment(info, temp);
+                result = temp.isEmpty();
+                break;
+            }
+            case "язык": {
+                temp = element.findElement(By.xpath("//div[@class='evnt-card-heading']/div/div/p[@class='language']/span")).getText();
+                Allure.addAttachment(info, temp);
+                result = temp.isEmpty();
+                break;
+            }
+            case "название мероприятия": {
+                temp = element.findElement(By.xpath("//div[@class='evnt-card-body']/div/div[@class='evnt-event-name']/h1/span")).getText();
+                Allure.addAttachment(info, temp);
+                result = temp.isEmpty();
+                break;
+            }
+            case "дата мероприятия": {
+                temp = element.findElement(By.xpath("//div[@class='evnt-card-body']/div/div[@class='evnt-event-dates']/div/div/p/span[1]")).getText();
+                Allure.addAttachment(info, temp);
+                result = temp.isEmpty();
+                break;
+            }
+            case "информация о регистрации": {
+                temp = element.findElement(By.xpath("//div[@class='evnt-card-body']/div/div[@class='evnt-event-dates']/div/div/p/span[2]")).getText();
+                Allure.addAttachment(info, temp);
+                result = temp.isEmpty();
+                break;
+            }
+            case "список спикеров": {
+                int size = element.findElements(By.xpath("//div[@class='evnt-card-footer']/div/div/div/div")).size();
+                Allure.addAttachment(info, String.valueOf(size));
+                result = size == 0;
+                break;
+            }
+        }
+        logger.info(String.format("Возвращаем результат проверки поля \"%s\"", info));
+        temp = null;
+        return result;
+    }
+
 }
