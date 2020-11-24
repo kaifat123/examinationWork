@@ -10,6 +10,13 @@ import org.apache.logging.log4j.Logger;
 import org.junit.Assert;
 import org.openqa.selenium.WebDriver;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Locale;
+
 public class EventsPageStepDefs {
     private WebDriver driver = DriverHooks.getWebDriver();
     private EventsPage eventsPage = new EventsPage(driver);
@@ -35,7 +42,43 @@ public class EventsPageStepDefs {
     }
 
     @Тогда("Проверить, что в карточке информация о {string} присутствует")
-    public void checkInfoCard(String info){
+    public void checkInfoCard(String info) {
         Assert.assertFalse(eventsPage.getInfoCardEvents(info));
+    }
+
+    @Тогда("Проверить, что дата проведения мероприятий больше или равна текущей даты")
+    public void checkDatePath1() {
+        SimpleDateFormat formatter = new SimpleDateFormat("dd MMM yyyy", Locale.ENGLISH);
+        Date dateNow = new Date();
+        logger.info("Текущая дата: " + dateNow);
+        for (String item : eventsPage.getAllDateEventsWeek()) {
+            try {
+                Date dateEvent = formatter.parse(item);
+                logger.info("Дата события: " + dateEvent);
+                Assert.assertTrue(dateEvent.getTime() >= dateNow.getTime());
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    @Тогда("Проверить, что дата проведения мероприятий находятся в пределах текущей недели")
+    public void checkDatePath2() {
+        SimpleDateFormat formatter = new SimpleDateFormat("dd MMM yyyy", Locale.ENGLISH);
+        Calendar dateEndWeek = Calendar.getInstance();
+        dateEndWeek.setTime(new Date());
+        logger.info("Текущая дата: " + dateEndWeek.getTime());
+        dateEndWeek.set(Calendar.DAY_OF_WEEK, 7);
+        logger.info("Дата конца недели: " + dateEndWeek.getTime());
+
+        for (String item : eventsPage.getAllDateEventsWeek()) {
+            try {
+                Date dateEvent = formatter.parse(item);
+                logger.info("Дата события: " + dateEvent);
+                Assert.assertTrue(dateEndWeek.getTime().getTime() >= dateEvent.getTime());
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
     }
 }
