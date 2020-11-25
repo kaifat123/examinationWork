@@ -54,7 +54,7 @@ public class VideosPage {
     /**
      * локатор поля для ввода значения в фильтр
      */
-    @FindBy(xpath = "//div[@class='evnt-search-filter']/input")
+    @FindBy(xpath = "//div[contains(@class,'evnt-search-filter')]/input")
     private WebElement searchFilter;
 
     /**
@@ -69,6 +69,15 @@ public class VideosPage {
     public void inputSearchFilter(String value) {
         searchFilter.sendKeys(value);
         logger.info("В фильтр поиска введено значение: " + value);
+    }
+
+    /**
+     * Метод возврата введенного значения в поле поиска
+     */
+    public String getValueSearchFilter() {
+        String result = searchFilter.getAttribute("value");
+        logger.info("В поле фильтра отображается значение: " + result);
+        return result;
     }
 
     /**

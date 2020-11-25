@@ -18,7 +18,7 @@ import java.util.concurrent.TimeUnit;
 
 public class DriverHooks {
     private static WebDriver driver;
-    protected static WebDriverWait wait;
+    public static WebDriverWait wait;
     public static Logger logger = LogManager.getLogger(DriverHooks.class);
 
     @Before
@@ -50,8 +50,8 @@ public class DriverHooks {
             }
         }
         driver.manage().window().maximize();
-        driver.manage().timeouts().implicitlyWait(20, TimeUnit.SECONDS);
-        wait = new WebDriverWait(driver, 10);
+        driver.manage().timeouts().implicitlyWait(5, TimeUnit.SECONDS);
+        wait = new WebDriverWait(driver, 5);
 
 
     }

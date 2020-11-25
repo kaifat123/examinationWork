@@ -68,13 +68,18 @@ public class EventsPageStepDefs {
     @Тогда("Проверить, что дата проведения мероприятий больше или равна текущей даты")
     public void checkDatePath1() {
         SimpleDateFormat formatter = new SimpleDateFormat("dd MMM yyyy", Locale.ENGLISH);
-        Date dateNow = new Date();
-        logger.info("Текущая дата: " + dateNow);
+        Calendar dateNow = Calendar.getInstance();
+        Calendar dateEvent = Calendar.getInstance();
+        dateNow.setTime(new Date());
+        logger.info("Текущая дата: " + dateNow.getTime());
         for (String item : eventsPage.getAllDateEventsWeek()) {
             try {
-                Date dateEvent = formatter.parse(item);
+                Date data = formatter.parse(item);
+                dateEvent.setTime(data);
+                dateEvent.set(Calendar.HOUR, 23);
+                dateEvent.set(Calendar.MINUTE, 59);
                 logger.info("Дата события: " + dateEvent);
-                Assert.assertTrue(dateEvent.getTime() >= dateNow.getTime());
+                Assert.assertTrue(dateEvent.getTime().getTime() >= dateNow.getTime().getTime());
             } catch (ParseException e) {
                 e.printStackTrace();
             }
