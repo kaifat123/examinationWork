@@ -64,6 +64,7 @@ public class EventsPage {
     @FindBy(xpath = "//div[@id='filter_location']/following-sibling::div//div[@class='evnt-checkbox form-check']//span[text()='Canada']")
     private WebElement checkBoxCanada;
 
+
     /**
      * Метод нажатия на кнопку выбора актуальности мероприятий (опционально)
      */
@@ -73,7 +74,10 @@ public class EventsPage {
         logger.info("Выполнено нажатие кнопки: " + eventTab);
     }
 
-    public void clickCheckBoxCanada(){
+    /**
+     * Метод нажатия на кнопку чек-бокса Канады
+     */
+    public void clickCheckBoxCanada() {
         checkBoxCanada.click();
         logger.info("Выбрали локацию в фильтре");
     }
@@ -84,7 +88,7 @@ public class EventsPage {
     public void setInputLocationFilter(String value) {
         inputLocationFilter.sendKeys(value);
         logger.info("Ввели текст поиска " + value);
-        Allure.addAttachment("Ввели текст поиска",value);
+        Allure.addAttachment("Ввели текст поиска", value);
     }
 
     /**
@@ -104,11 +108,25 @@ public class EventsPage {
     }
 
     /**
+     * Метод получения массива событий
+     */
+    public String clickFirstEventInList() {
+        WebElement element = getListAllEvents().get(0);
+        String str = element.findElement(By.xpath(eventName)).getText();
+        logger.info("Возвращаем название события: " + str);
+        Allure.addAttachment("Название мероприятия", str);
+        element.click();
+        logger.info("Выполнен вход в событие");
+        return str;
+    }
+
+
+    /**
      * Метод получения счетчика событий
      */
     public Integer getCountUpcomingEvents(String event) {
         logger.info("Возвращаем счетчик событий");
-        return Integer.parseInt(eventTabElements.findElement(By.xpath(String.format("//span[text()=\"%s\"]/following-sibling::span[contains(@class,'evnt-tab-counter')]",event))).getText());
+        return Integer.parseInt(eventTabElements.findElement(By.xpath(String.format("//span[text()=\"%s\"]/following-sibling::span[contains(@class,'evnt-tab-counter')]", event))).getText());
     }
 
     /**
@@ -134,40 +152,47 @@ public class EventsPage {
                 temp = element.findElement(By.xpath(conferenceVenue)).getText();
                 Allure.addAttachment(info, temp);
                 result = temp.isEmpty();
+                logger.info(String.format("Возвращаем результат проверки поля \"%s\"", info));
                 break;
             }
             case "язык": {
                 temp = element.findElement(By.xpath(language)).getText();
                 Allure.addAttachment(info, temp);
                 result = temp.isEmpty();
+                logger.info(String.format("Возвращаем результат проверки поля \"%s\"", info));
                 break;
             }
             case "название мероприятия": {
                 temp = element.findElement(By.xpath(eventName)).getText();
                 Allure.addAttachment(info, temp);
                 result = temp.isEmpty();
+                logger.info(String.format("Возвращаем результат проверки поля \"%s\"", info));
                 break;
             }
             case "дата мероприятия": {
                 temp = element.findElement(By.xpath(eventDate)).getText();
                 Allure.addAttachment(info, temp);
                 result = temp.isEmpty();
+                logger.info(String.format("Возвращаем результат проверки поля \"%s\"", info));
                 break;
             }
             case "информация о регистрации": {
                 temp = element.findElement(By.xpath(registrationInformation)).getText();
                 Allure.addAttachment(info, temp);
                 result = temp.isEmpty();
+                logger.info(String.format("Возвращаем результат проверки поля \"%s\"", info));
                 break;
             }
             case "список спикеров": {
                 int size = element.findElements(By.xpath(listOfSpeakers)).size();
                 Allure.addAttachment(info, String.valueOf(size));
                 result = size == 0;
+                logger.info(String.format("Возвращаем результат проверки поля \"%s\"", info));
                 break;
             }
+            default:
+                throw new IllegalStateException("Unexpected value: " + info);
         }
-        logger.info(String.format("Возвращаем результат проверки поля \"%s\"", info));
         return result;
     }
 
