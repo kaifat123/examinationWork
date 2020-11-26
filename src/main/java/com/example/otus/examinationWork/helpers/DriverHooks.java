@@ -27,28 +27,28 @@ public class DriverHooks {
         String docker = System.getProperty("docker");
         String browser = System.getProperty("browser");
         String options = System.getProperty("options");
-            if (docker!=null&&docker.equals("true")) {
-                String selenoidURL = "http://localhost:4444/wd/hub";
-                DesiredCapabilities caps = new DesiredCapabilities();
-                if (browser != null) {
-                    caps.setBrowserName(browser);
-                } else {
-                    caps.setBrowserName(ConfProperties.getProperty("driver.browser.name"));
-                }
-                caps.setVersion("");
-                caps.setCapability("enableVNC", true);
-                caps.setCapability("screenResolution", "2048x1280");
-                driver = new RemoteWebDriver(new URL(selenoidURL), caps);
-
+        if (docker != null && docker.equals("true")) {
+            String selenoidURL = "http://localhost:4444/wd/hub";
+            DesiredCapabilities caps = new DesiredCapabilities();
+            if (browser != null) {
+                caps.setBrowserName(browser);
             } else {
-                if (browser == null) {
-                    driver = WebDriverHelper.getDriver();
-                } else if (options != null) {
-                    driver = WebDriverHelper.getDriverWithOptions(browser, options);
-                } else {
-                    driver = WebDriverHelper.getDriver(browser);
-                }
+                caps.setBrowserName(ConfProperties.getProperty("driver.browser.name"));
             }
+            caps.setVersion("");
+            caps.setCapability("enableVNC", true);
+            caps.setCapability("screenResolution", "2048x1280");
+            driver = new RemoteWebDriver(new URL(selenoidURL), caps);
+
+        } else {
+            if (browser == null) {
+                driver = WebDriverHelper.getDriver();
+            } else if (options != null) {
+                driver = WebDriverHelper.getDriverWithOptions(browser, options);
+            } else {
+                driver = WebDriverHelper.getDriver(browser);
+            }
+        }
         driver.manage().window().maximize();
         driver.manage().timeouts().implicitlyWait(2, TimeUnit.SECONDS);
         wait = new WebDriverWait(driver, 2);
