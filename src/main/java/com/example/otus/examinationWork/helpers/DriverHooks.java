@@ -28,7 +28,7 @@ public class DriverHooks {
         String browser = System.getProperty("browser");
         String options = System.getProperty("options");
         if (docker != null && docker.equals("true")) {
-            String selenoidURL = "http://localhost:4444/wd/hub";
+            String selenoidURL = "http://192.168.0.102:4444/wd/hub";
             DesiredCapabilities caps = new DesiredCapabilities();
             if (browser != null) {
                 caps.setBrowserName(browser);
