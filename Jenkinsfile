@@ -7,7 +7,7 @@ pipeline {
     stages {
         stage('Download project') {
             steps {
-                git 'https://github.com/kaifat123/autotestinguiCopy.git'
+                git 'https://github.com/kaifat123/examinationWork.git'
             }
         }
         stage("Run tests") {
