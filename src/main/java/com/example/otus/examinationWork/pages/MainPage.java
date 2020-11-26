@@ -1,6 +1,7 @@
 package com.example.otus.examinationWork.pages;
 
 import com.example.otus.examinationWork.helpers.ConfProperties;
+import com.example.otus.examinationWork.helpers.DriverHooks;
 import io.qameta.allure.Allure;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -9,6 +10,9 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.PageFactory;
+
+import static org.openqa.selenium.support.ui.ExpectedConditions.invisibilityOfElementLocated;
+import static org.openqa.selenium.support.ui.ExpectedConditions.visibilityOfElementLocated;
 
 
 public class MainPage {
@@ -30,6 +34,8 @@ public class MainPage {
      * Метод нажатия на вкладку (опционально)
      */
     public void clickTabsVariable(String tab) {
+        DriverHooks.wait
+                .until(invisibilityOfElementLocated(By.xpath("//div[@id='app']//section[@class='evnt-panel evnt-talks-panel']//div[@class='evnt-global-loader']")));
         tabsVariable.findElement(By.xpath(String.format("//a[text()=\"%s\"]", tab))).click();
         Allure.addAttachment("Выполнен переход по вкладке ", tab);
         logger.info("Выполнен переход по вкладке: " + tab);

@@ -3,7 +3,6 @@ package com.example.otus.examinationWork.steps;
 import com.example.otus.examinationWork.helpers.DriverHooks;
 import com.example.otus.examinationWork.pages.EventCardPage;
 import com.example.otus.examinationWork.pages.EventsPage;
-import io.cucumber.datatable.DataTable;
 import io.cucumber.java.ru.Затем;
 import io.cucumber.java.ru.И;
 import io.cucumber.java.ru.Тогда;
@@ -12,13 +11,19 @@ import io.qameta.allure.Attachment;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.junit.Assert;
+import org.openqa.selenium.By;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.*;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+import java.util.Locale;
+
+import static org.openqa.selenium.support.ui.ExpectedConditions.invisibilityOfElementLocated;
 
 public class EventsPageStepDefs {
     private WebDriver driver = DriverHooks.getWebDriver();
@@ -33,6 +38,8 @@ public class EventsPageStepDefs {
 
     @Затем("Пользователь нажимает на фильтр локации, вводит в поиск {string} и производит выбор локации")
     public void actionFilterLocationCanada(String input) {
+        DriverHooks.wait
+                .until(invisibilityOfElementLocated(By.xpath("//div[@id='app']//section[@class='evnt-panel evnt-talks-panel']//div[@class='evnt-global-loader']")));
         eventsPage.clickFilterLocation();
         eventsPage.setInputLocationFilter(input);
         eventsPage.clickCheckBoxCanada();
@@ -78,7 +85,7 @@ public class EventsPageStepDefs {
                 dateEvent.setTime(data);
                 dateEvent.set(Calendar.HOUR, 23);
                 dateEvent.set(Calendar.MINUTE, 59);
-                logger.info("Дата события: " + dateEvent);
+                logger.info("Дата события: " + dateEvent.getTime());
                 Assert.assertTrue(dateEvent.getTime().getTime() >= dateNow.getTime().getTime());
             } catch (ParseException e) {
                 e.printStackTrace();

@@ -13,7 +13,6 @@ import org.openqa.selenium.By;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.support.ui.ExpectedConditions;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -22,6 +21,7 @@ import java.util.Map;
 import java.util.Optional;
 
 import static org.openqa.selenium.support.ui.ExpectedConditions.invisibilityOfElementLocated;
+import static org.openqa.selenium.support.ui.ExpectedConditions.visibilityOfElementLocated;
 
 public class VideoPageStepDefs {
     private WebDriver driver = DriverHooks.getWebDriver();
@@ -30,6 +30,8 @@ public class VideoPageStepDefs {
 
     @Затем("Пользователь нажимает на  кнопку \"More Filters\"")
     public void clickButtonMoreFilters() {
+        DriverHooks.wait
+                .until(invisibilityOfElementLocated(By.xpath("//div[@id='app']//section[@class='evnt-panel evnt-talks-panel']//div[@class='evnt-global-loader']")));
         videosPage.clickButtonMoreFilters();
     }
 
@@ -48,7 +50,7 @@ public class VideoPageStepDefs {
     public void checkNameReportsValueFilter() {
         String value = videosPage.getValueSearchFilter();
         DriverHooks.wait
-                .until(invisibilityOfElementLocated(By.xpath("//section[@class='evnt-panel evnt-talks-panel']//div[@class='evnt-loader']")));
+                .until(invisibilityOfElementLocated(By.xpath("//div[@id='app']//section[@class='evnt-panel evnt-talks-panel']//div[@class='evnt-global-loader']")));
         for (String item : videosPage.getListCardName()) {
             Assert.assertTrue(item.contains(value));
         }
@@ -67,6 +69,8 @@ public class VideoPageStepDefs {
             e.printStackTrace();
         }
         videosPage.clickCheckboxFilterVariable(checkBoxName);
+        DriverHooks.wait
+                .until(invisibilityOfElementLocated(By.xpath("//div[@id='app']//section[@class='evnt-panel evnt-talks-panel']//div[@class='evnt-global-loader']")));
     }
 
     @Attachment(value = "Page screenshot", type = "image/png")
